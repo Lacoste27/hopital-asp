@@ -1,0 +1,27 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model IEnumerable<patient.Entities.Patient>
+@{
+}
+
+<h1>Liste des Patients</h1>
+
+<div id="grid-container">
+    @(Html.DevExtreme().DataGrid()
+        .ID("patientliste")
+        .ShowBorders(true)
+        .DataSource(Model)
+        .Columns(c => {
+            c.Add().DataField("Nom");
+            c.Add().DataField("Prenom");
+            c.Add().DataField("Date de naissance");
+        })
+    )
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#grid-container").dxDataGrid();
+    });
+</script>
