@@ -17,3 +17,5 @@ CREATE TABLE Patient (
     date_naissance DATE NOT NULL
 )
 ```
+3. Lancer le script [patients.sql](Utils/patients.sql)
+4. Lancer le projet dans `Visual Studio`
