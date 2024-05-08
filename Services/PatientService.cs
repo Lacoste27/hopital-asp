@@ -8,5 +8,17 @@ namespace patient.Services {
         public IEnumerable<Patient> GetAllPatients(){
             return this.Context.Patients;
         }
+
+        public IEnumerable<Patient> GetAllPatients(int take, int skip) {
+            if (take == 0) {
+                take = 5;
+            } 
+
+            if(skip == 0) {
+                skip = 0;
+            }
+
+            return this.Context.Patients.Skip(skip).Take(take);
+        }
     }
 }

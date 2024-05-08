@@ -12,10 +12,16 @@ namespace patient.Controllers {
         private IPatientService patientService = patientService;
 
         // GET: PatientController
-        public ActionResult Index()
-        {
+        public ActionResult Index() {
+            return View();
+        }
+
+        [HttpGet]
+        public object Get(DataSourceLoadOptions loadOptions) {
             IEnumerable<Patient> listePatient = this.patientService.GetAllPatients();
-            return View(listePatient);
+
+
+            return DataSourceLoader.Load(listePatient, loadOptions);
         }
 
         // GET: PatientController/Details/5

@@ -1,27 +1,63 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@model IEnumerable<patient.Entities.Patient>
 @{
 }
 
 <h1>Liste des Patients</h1>
 
-<div id="grid-container">
     @(Html.DevExtreme().DataGrid()
-        .ID("patientliste")
+        .ID("gridContainer")
         .ShowBorders(true)
-        .DataSource(Model)
+        .DataSource(d => d.Mvc().Controller("Patient").LoadAction("Get").Key("Id"))
+        .ShowRowLines(true)
+        .RowAlternationEnabled(true)
+        .RemoteOperations(true)
+        .Paging(paging => paging.PageSize(50))
+        .Sorting(sorting => sorting.Mode(GridSortingMode.Multiple))
+        .SearchPanel(searchPanel => searchPanel
+            .Visible(true)
+            .Width(300)
+            .Placeholder("Rechercher...")
+        )
+        .Pager(pager =>
+        {
+            pager.Visible(true);
+            pager.DisplayMode(GridPagerDisplayMode.Full);
+            pager.ShowPageSizeSelector(true);
+            pager.AllowedPageSizes(new JS("[5, 10,20, 30, 40, 50, 100, 200, 'all']"));
+            pager.ShowInfo(true);
+            pager.ShowNavigationButtons(true);
+        })
         .Columns(c => {
             c.Add().DataField("Nom");
             c.Add().DataField("Prenom");
-            c.Add().DataField("Date de naissance");
+            c.Add().DataField("DateNaissance").DataType(GridColumnDataType.Date).Format("yyyy-MM-dd");
         })
-    )
-</div>
-
+        .Export(e => e.Enabled(true)
+                .AllowExportSelectedData(true)
+                .Formats(new[] { "pdf" })
+        )
+        .OnExporting("exportToPDF")
+        )
+@section ExternalDependencies {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        window.jsPDF = window.jspdf.jsPDF;
+    </script>
+}
 <script>
-    $(document).ready(function () {
-        $("#grid-container").dxDataGrid();
-    });
+    function exportToPDF(e) {
+        var doc = new jsPDF();
+
+        DevExpress.pdfExporter.exportDataGrid({
+            jsPDFDocument: doc,
+            component: e.component,
+            indent: 5,
+        }).then(function () {
+            doc.save("liste-des-patients.pdf");
+        });
+    }
 </script>
+
+

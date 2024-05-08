@@ -68,12 +68,13 @@
             <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar" aria-expanded="false" aria-controls="navbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
-        </div>
+        </div>  
     </nav>
 
     <main class="container">
         @RenderBody()
     </main>
+    @RenderSection("ExternalDependencies", required: false)
 </body>
 
 </html>
